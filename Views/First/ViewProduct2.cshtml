@@ -1,0 +1,14 @@
+@model webmvc.Models.ProdcutModel
+@{
+    var product = ViewData["product"] as ProdcutModel;
+}
+
+<div class="card bg-primary text-white"> 
+    <h1 class="card-header">@product.productName</h1>
+    <div class="card-body"> 
+        <p class="card-text"> 
+            Gia = @product.Price
+        </p>
+    </div>
+
+</div>
