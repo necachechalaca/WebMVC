@@ -95,9 +95,10 @@ namespace webmvc.Controllers
         }
 
         //theo Model
+        [AcceptVerbs("POST", "GET")]
         public IActionResult ViewProduct(int? id)
         {
-            var product = _productServices.Where(p =>p.productId == id).FirstOrDefault();
+            var product = _productServices.Where(p => p.productId ==id).FirstOrDefault();
             if( product == null){
                 return NotFound();
 

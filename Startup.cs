@@ -10,6 +10,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
 using webmvc.Services;
+using System.Net.Http;
+using System.Net;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing.Constraints;
+
+
+
 
 
 
@@ -43,6 +50,7 @@ namespace webmvc
             });
            // services.AddSingleton<ProdcutServices>();
            services.AddSingleton<ProdcutServices,ProdcutServices>();
+           services.AddSingleton<PlanetServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,28 +68,102 @@ namespace webmvc
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseRouting();
+           
+            app.UseRouting(); //EndpointRoutingMiddleware
 
             app.UseAuthentication(); // xac dinh danh tinh
 
             app.UseAuthorization(); // xac thuc quyen truy cap
 
-            app.UseEndpoints(endpoints =>
+          
+                // endpoints.MapGet("/sayhi", async  (context) =>{
+                //        await   context.Response.WriteAsync($"{DateTime.Now}");
+                // });
+              //  endpoints.MapControllers  cau hinh  tao ra endpoint toi controller, cac enpoint dc dinh nghia truc tiep
+              // trong controller thong qua atribut
+
+                // endpoints.MapAreaControllerRoute
+            //    endpoints.MapDefaultControllerRoute
+            // endpoints.MapAreaControllerRoute  tao ra entpoint den cac controller nam trong erea
+
+
+                // URL = start-here
+                // controller
+                // action
+                //erea
+            // endpoints.MapControllerRoute( 
+            //     name :"first", 
+            //     pattern :"xemsanpham/{id?}", // 
+            // defaults: new {
+            //     controller = "First",
+            //     action = "ViewProductc",
+            //     id = 3
+            // dotnet aspnet-codegenerator -h
+
+
+            // });
+             app.UseEndpoints(endpoints =>
             {
+                //  endpoints.MapControllerRoute(
+                //     name: "first",
+                //     pattern: "start-here/{controller}/{action}/{id?}"
+                //     // defaults : new {
+                //     //     controller =" First",
+                //     //     action = "ViewProduct",
+                //     //     id =3,
+                //    );  
+                    //  endpoints.MapControllerRoute(
+                    // name: "first",
+                    // pattern: "start-here",
+                    // defaults : new {
+                    //     controller =" First",
+                    //     action = "HelloView",
+                        // id =3,
+                    // });  
 
-
-                // truy van Rout enpoint "{controller=Home}/{action=Index}/{id?}");
-                // tim den Controller Home va tim den phuong thuc Index
-
-                //First/Index
+                    // [AcceptVerbs("POST", "GET")]
+                  //  [Route]
+                  //  [HT]
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    name : "first",
+                    pattern: "{url:regex(^((xemsanpham)|(viewproduct))$)}/{id:range(1,4)}",
+                    defaults : new {
+                        controller = "First",
+                        action = "ViewProduct"
+                    },
+                    constraints: new {
+                        // url = new RegexRouteConstraint(@"^((xemsanpham)|(viewproduct))$"),
+
+                        //  id = new RangeRouteConstraint(1,4)
+                    }
+                );   
                 
-                endpoints.MapRazorPages();
+                // endpoints.MapAreaControllerRoute() // Areas/AreasName/Views/Product/Index.cshtml
                
+
+                   
+
+                // chi thuc hien tai cac controller khong co area
+
+                 endpoints.MapControllerRoute(
+                      name: "default",
+                     pattern: "{controller=Home}/{action=Index}/{id?}"); // la route
+                    
+
+
+
+
+               
+
+
+
+
+                endpoints.MapRazorPages();
+
             });
+             app.UseStatusCodePages();
+            
+            
         }
     }
 }

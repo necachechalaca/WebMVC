@@ -16,3 +16,11 @@
 -ViewData
 -ViewBag
 -TemData
+
+## Area
+La ten dung de Routing
+la cau truc chua thu muc chua MVC
+thiet lap Area cho controller bang [Area("AreaName)]
+tao cau truc thu muc
+
+`` dotnet asp-codegenerator area Product

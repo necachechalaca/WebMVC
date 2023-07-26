@@ -1,0 +1,13 @@
+@using webmvc.Models
+
+@model List<ProdcutModel>
+
+
+<h1> Danh sach cac san pham</h1>
+<ul>
+    @foreach (var product in Model)
+    {
+        <l1>@product.productName </l1>
+    }
+
+</ul>
