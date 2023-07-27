@@ -14,6 +14,8 @@ using System.Net.Http;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing.Constraints;
+using webmvc.Models;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -36,6 +38,11 @@ namespace webmvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(option =>{
+                var connection = Configuration.GetConnectionString("MyWeb");
+                 option.UseSqlServer(connection);
+            });
+            
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.Configure<RazorViewEngineOptions>(option =>{

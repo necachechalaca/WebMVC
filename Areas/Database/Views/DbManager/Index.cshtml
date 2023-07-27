@@ -1,0 +1,60 @@
+@using webmvc.Models 
+@using Microsoft.EntityFrameworkCore
+@using System.Data;
+@inject AppDbContext dbcontext
+
+
+@{
+    ViewData["Title"] = "Thong tin Db";
+    var connect = dbcontext.Database.GetDbConnection();
+    var dbName = connect.Database;
+    var can_conec = dbcontext.Database.CanConnect();
+    
+  var hehe =  dbcontext.Database.GetPendingMigrations();
+   var haha =  dbcontext.Database.GetAppliedMigrations();
+}
+
+
+<h2> tHONG TIN<h2>
+
+    <p> Database : @dbName</p>
+    <p> Souce  : @connect.DataSource</p>
+    <p> State : @connect.State</p>
+
+    <hr>
+
+ <h2> Migrations</h2>   
+ @foreach (var migration in hehe)
+ {
+    <p>@migration </p>
+ }
+ @foreach (var migration in haha)
+ {
+    <p> @migration (pending) </p>
+ }
+
+ @if(!can_conec)
+ {
+   <p class="alert alert-danger"> khong co kha nang ket noi voi database </p> 
+ }
+ @if(dbcontext.Database.GetPendingMigrations().Any())
+ {
+   <form method="post"> 
+      <a  class="btn btn-success" asp-action="Migrate"> Tao db (Cap nhat Migrations) @dbName</a>
+   </form>
+    
+ }
+
+ @if(can_conec)
+ {
+   <h2> Cac Table </h2>
+   await dbcontext.Database.OpenConnectionAsync(); // mo ra ket noi voi sql
+   var table = dbcontext.Database.GetDbConnection().GetSchema("Tables"); // lay du lieu ve cac bang 
+ <ul>
+  @foreach (System.Data.DataRow row in  table.Rows)
+   {
+      <li>@row["TABLE_NAME"] </li>
+   }
+ </ul>
+ <a  class="btn btn-danger" asp-action="DeleteDb"> Xoa database @dbName</a>
+ }
