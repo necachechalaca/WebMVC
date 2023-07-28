@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using webmvc.Models.Contact;
 
 
 namespace webmvc.Models
@@ -19,6 +20,6 @@ namespace webmvc.Models
             base.OnModelCreating(modelBuilder);
         }
 
-        // DbSet<Article> articles {get;set;}
+       public DbSet<Contactt> contacts {get;set;}
     }
 }

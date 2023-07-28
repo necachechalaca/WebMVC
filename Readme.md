@@ -24,3 +24,9 @@ thiet lap Area cho controller bang [Area("AreaName)]
 tao cau truc thu muc
 
 `` dotnet asp-codegenerator area Product
+
+## LOG
+// "Microsoft.EntityFrameworkCore.Query": "Information",
+// "Microsoft.EntityFrameworkCore.Database.Command": "Information"
+them vao file appsetting de doc loi~
+    
