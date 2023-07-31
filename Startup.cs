@@ -47,12 +47,8 @@ namespace webmvc
                 var connection = Configuration.GetConnectionString("MyWeb");
                option.UseSqlServer(connection);
             });
+              
 
-
-            services.AddOptions();
-            var mailSetting = Configuration.GetSection("MailSettings");
-            services.Configure<MailSettings>(mailSetting);
-            services.AddSingleton<IEmailSender, SendMailService>();
 
 
            
@@ -74,6 +70,7 @@ namespace webmvc
                 // {0} ten action
                 // {1} ten controller
                 // {2} ten ares
+                
 
                 option.ViewLocationFormats.Add("MyView/{1}/{0}.cshtml" + RazorViewEngine.ViewExtension);
 
@@ -106,7 +103,41 @@ namespace webmvc
                 options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
 
             });
-            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            services.AddIdentity<AppUser,IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            
+            services.AddOptions();
+            var mailSetting = Configuration.GetSection("MailSettings");
+            services.Configure<MailSettings>(mailSetting);
+            services.AddSingleton<IEmailSender, SendMailService>();
+            services.AddAuthorization(options =>
+            {
+                // User thỏa mãn policy khi có roleclaim: permission với giá trị manage.user
+                options.AddPolicy("AdminDropdown", policy => {
+                    policy.RequireClaim("permission", "manage.user");
+                });
+                
+            });
+
+            services.AddAuthentication()
+                    .AddGoogle(googleOptions =>
+                    {
+                        // Đọc thông tin Authentication:Google từ appsettings.json
+                        IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+
+                        // Thiết lập ClientID và ClientSecret để truy cập API google
+                        googleOptions.ClientId = googleAuthNSection["ClientId"];
+                        googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+
+                    })
+                    .AddFacebook(facebookOptions => {
+                        // Đọc cấu hình
+                        IConfigurationSection facebookAuthNSection = Configuration.GetSection("Authentication:Facebook");
+                        facebookOptions.AppId = facebookAuthNSection["AppId"];
+                        facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
+                        // Thiết lập đường dẫn Facebook chuyển hướng đến
+                        facebookOptions.CallbackPath = "/dang-nhap-tu-facebook";
+                    });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
