@@ -19,6 +19,6 @@ namespace webmvc.Areas.Identity.Models.ManageViewModels
 
 
       [Display(Name = "Ngày sinh")]
-      public DateTime? BirthDate { get; set; }
+      public DateTime BirthDate { get; set; }
   }
 }

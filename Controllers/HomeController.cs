@@ -24,7 +24,8 @@ namespace webmvc.Controllers
         }
 
         public string HiHome()=> " xin chao";
-
+ 
+        
         public IActionResult Privacy()
         {
             return View();

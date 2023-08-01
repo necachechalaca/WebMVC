@@ -11,8 +11,8 @@ namespace webmvc.Models
           [StringLength(400)]  
           public string HomeAdress { get; set; }
 
-          // [Required]       
+          [Required]       
           [DataType(DataType.Date)]
-          public DateTime? BirthDate { get; set; }
+          public DateTime BirthDate { get; set; }
     }
 }

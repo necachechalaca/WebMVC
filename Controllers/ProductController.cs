@@ -21,6 +21,7 @@ namespace webmvc.Controllers
         }
         public IActionResult Index()
         {
+             _logger.LogInformation("Hello");
              var product = _productServices.OrderBy(p => p.productName).ToList();
             return View(product);
         }

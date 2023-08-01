@@ -525,10 +525,10 @@ namespace webmvc.Areas.Identity.Controllers
             {
                 await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security Code", message);
             }
-            // else if (model.SelectedProvider == "Phone")
-            // {
-            //     await _emailSender.SendSmsAsync(await _userManager.GetPhoneNumberAsync(user), message);
-            // }
+            else if (model.SelectedProvider == "Phone")
+            {
+                await _emailSender.SendSmsAsync(await _userManager.GetPhoneNumberAsync(user), message);
+            }
 
             return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }

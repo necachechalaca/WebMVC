@@ -19,12 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-
-
-
-
-
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace webmvc
 {
@@ -57,9 +52,8 @@ namespace webmvc
             //         .AddEntityFrameworkStores<AppDbContext>()
             //         .AddDefaultTokenProviders();
 
-              services.AddDefaultIdentity<AppUser>() 
-                    .AddEntityFrameworkStores<AppDbContext>()
-                    .AddDefaultTokenProviders();
+            services.AddIdentity<AppUser,IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -76,8 +70,9 @@ namespace webmvc
 
             });
             // services.AddSingleton<ProdcutServices>();
-            services.AddSingleton<ProdcutServices, ProdcutServices>();
+            services.AddScoped<ProdcutServices, ProdcutServices>(); // Không nên dùng addSingleton tại vì trong suốt ứng dụng chỉ tạo 1 instance, nếu product mà tạo như vậy thì chỉ có 1 sản phẩm
             services.AddSingleton<PlanetServices>();
+            services.AddSingleton<IdentityErrorDescriber,AppIdentityErrorDescriber>();
             services.Configure<IdentityOptions>(options =>
             {
                 // Thiết lập về Password
@@ -103,7 +98,6 @@ namespace webmvc
                 options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
 
             });
-            services.AddIdentity<AppUser,IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
             
             services.AddOptions();
             var mailSetting = Configuration.GetSection("MailSettings");
@@ -118,25 +112,26 @@ namespace webmvc
                 
             });
 
-            services.AddAuthentication()
-                    .AddGoogle(googleOptions =>
-                    {
-                        // Đọc thông tin Authentication:Google từ appsettings.json
-                        IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
+           services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                   .AddCookie();
+                    // .AddGoogle(googleOptions =>
+                    // {
+                    //     // Đọc thông tin Authentication:Google từ appsettings.json
+                    //     IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
 
-                        // Thiết lập ClientID và ClientSecret để truy cập API google
-                        googleOptions.ClientId = googleAuthNSection["ClientId"];
-                        googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+                    //     // Thiết lập ClientID và ClientSecret để truy cập API google
+                    //     googleOptions.ClientId = googleAuthNSection["ClientId"];
+                    //     googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
 
-                    })
-                    .AddFacebook(facebookOptions => {
-                        // Đọc cấu hình
-                        IConfigurationSection facebookAuthNSection = Configuration.GetSection("Authentication:Facebook");
-                        facebookOptions.AppId = facebookAuthNSection["AppId"];
-                        facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
-                        // Thiết lập đường dẫn Facebook chuyển hướng đến
-                        facebookOptions.CallbackPath = "/dang-nhap-tu-facebook";
-                    });
+                    // })
+                    // .AddFacebook(facebookOptions => {
+                    //     // Đọc cấu hình
+                    //     IConfigurationSection facebookAuthNSection = Configuration.GetSection("Authentication:Facebook");
+                    //     facebookOptions.AppId = facebookAuthNSection["AppId"];
+                    //     facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
+                    //     // Thiết lập đường dẫn Facebook chuyển hướng đến
+                    //     facebookOptions.CallbackPath = "/dang-nhap-tu-facebook";
+                    // });
 
         }
 
@@ -238,15 +233,6 @@ namespace webmvc
                endpoints.MapControllerRoute(
                      name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}"); // la route
-
-
-
-
-
-
-
-
-
 
                endpoints.MapRazorPages();
 
