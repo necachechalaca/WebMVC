@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using webmvc.Models.Contact;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using webmvc.Models.Blog;
 
 
 namespace webmvc.Models
@@ -26,12 +27,16 @@ namespace webmvc.Models
                     entityType.SetTableName(tableName.Substring(6));
                 }
             }
+            modelBuilder.Entity<Category>(entity =>{
+                entity.HasIndex(c=>c.Slug);
+            });
 
 
         }
 
        public DbSet<Contactt> contacts {get;set;}
        public DbSet<AppUser> appUsers {get;set;}
+        public DbSet<Category> categories {get;set;}
 
     }
 }

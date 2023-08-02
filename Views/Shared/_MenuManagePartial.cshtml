@@ -2,11 +2,12 @@
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Manage
   </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
     <a class="dropdown-item" asp-action="Index" asp-controller="DbManager" asp-area="Database">Database</a>
     <a class="dropdown-item" asp-action="Index" asp-controller="Contact" asp-area="Contact">Lien He</a>
      <a class="dropdown-item" asp-action="Index" asp-controller="Role" asp-area="Identity">Quan Ly (role)</a>
       <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Identity">Quan ly (User)</a>
+      <a class="dropdown-item" asp-action="Index" asp-controller="Category" asp-area="Blog">Quản Lý Blog</a>
   
   </div>
 </div>

@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using webmvc.Models;
 using webmvc.Models.Contact;
 using Microsoft.AspNetCore.Authorization;
+using webmvc.Data;
 
 namespace webmvc.Areas.Contact.Controllers
 {
     [Area("Contact")]
+    [Authorize(Roles =RoleName.Administrator)]
     public class ContactController : Controller
     {
         private readonly AppDbContext _context;

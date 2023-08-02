@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using webmvc.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using webmvc.Data;
 
 namespace webmvc.Areas.Database.Controllers
 {
@@ -16,9 +18,13 @@ namespace webmvc.Areas.Database.Controllers
     {
 
         private readonly AppDbContext _appdbContext;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public DbManagerController(AppDbContext appDbContext){
+        public DbManagerController(AppDbContext appDbContext,UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager ){
             _appdbContext = appDbContext;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
         public IActionResult Index()
         {
@@ -50,6 +56,35 @@ namespace webmvc.Areas.Database.Controllers
 
            StatusMassege = " Tao database thanh conhg";
             return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> SeedDataAsync()
+        {
+            var roleNames = typeof(RoleName).GetFields().ToList();
+            foreach (var r in roleNames)
+            {
+               var rolename =  (string)r.GetRawConstantValue();
+               var rfound = await _roleManager.FindByNameAsync(rolename);
+               if(rfound == null)
+               {
+                await _roleManager.CreateAsync(new IdentityRole(rolename));
+               }
+            }
+
+            // admin , pass = admin123, admin@example.com
+            var useradmin = await _userManager.FindByNameAsync("admin");
+            if(useradmin == null)
+            {
+                useradmin = new AppUser(){
+                    UserName = "admin",
+                    Email = "admin@example.com",
+                    EmailConfirmed = true
+                };
+                await _userManager.CreateAsync(useradmin, "admin123");
+                await _userManager.AddToRoleAsync(useradmin, RoleName.Administrator);
+                
+            }
+            StatusMassege = " Vua seedData";
+            return RedirectToAction("Index");
         }
 
     }

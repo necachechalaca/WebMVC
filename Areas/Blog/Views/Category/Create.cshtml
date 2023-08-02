@@ -1,0 +1,85 @@
+@model webmvc.Models.Blog.Category
+
+@{
+   @* ViewData["Title"] = "Tạo chuyên mục";
+   var item = new List<SelectListItem>();
+    item.Add(new SelectListItem (){
+        Text = "Mục 1",
+        Value = "Gía trị 1"
+    });
+     item.Add(new SelectListItem (){
+        Text = "Mục 2",
+        Value = "Gía trị 2",
+        Selected = true
+    });
+     item.Add(new SelectListItem (){
+        Text = "Mục 3",
+        Value = "Gía trị 3",
+        Selected = true
+    });
+    item.Add(new SelectListItem (){
+        Text = "Mục 4",
+        Value = "Gía trị 5",
+        Disabled = true
+    }); *@
+
+    @* var data = new object[]{
+        new {
+            ten = " Ten 1",
+            giatri = 1
+        },
+         new {
+            ten = " Ten 2",
+            giatri = 2
+        },
+         new {
+            ten = " Ten 3",
+            giatri = 3
+        }
+    }; *@
+
+
+    @* var item = new SelectList(data); *@
+}
+
+@* <select asp-items="item"> </select> *@
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+             <div class="form-group">
+                <label asp-for="ParentCategoryId" class="control-label"></label>
+                <select asp-for="ParentCategoryId" class ="form-control" asp-items="ViewBag .ParentCategoryId"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">    
+                <label asp-for="Content" class="control-label"></label>
+                <textarea rows="5" asp-for="Content" class="form-control" > </textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Slug" class="control-label"></label>
+                <input asp-for="Slug" class="form-control" />
+                <span asp-validation-for="Slug" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
