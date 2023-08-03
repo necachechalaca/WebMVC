@@ -59,20 +59,20 @@ namespace App.Areas.Identity.Controllers
 
             var qr = _userManager.Users.OrderBy(u => u.UserName);
 
-            model.totalUsers = await qr.CountAsync();
-            model.countPages = (int)Math.Ceiling((double)model.totalUsers / model.ITEMS_PER_PAGE);
+                model.totalUsers = await qr.CountAsync();
+                model.countPages = (int)Math.Ceiling((double)model.totalUsers / model.ITEMS_PER_PAGE);
 
-            if (model.currentPage < 1)
-                model.currentPage = 1;
-            if (model.currentPage > model.countPages)
-                model.currentPage = model.countPages;
+                if (model.currentPage < 1)
+                    model.currentPage = 1;
+                if (model.currentPage > model.countPages)
+                    model.currentPage = model.countPages;
 
-            var qr1 = qr.Skip((model.currentPage - 1) * model.ITEMS_PER_PAGE)
-                        .Take(model.ITEMS_PER_PAGE)
-                        .Select(u => new UserAndRole() {
-                            Id = u.Id,
-                            UserName = u.UserName,
-                        });
+                var qr1 = qr.Skip((model.currentPage - 1) * model.ITEMS_PER_PAGE)
+                            .Take(model.ITEMS_PER_PAGE)
+                            .Select(u => new UserAndRole() {
+                                Id = u.Id,
+                                UserName = u.UserName,
+                            });
 
             model.users = await qr1.ToListAsync();
 

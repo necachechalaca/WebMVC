@@ -9,6 +9,8 @@ using webmvc.Models.Blog;
 using webmvc.Models;
 using Microsoft.AspNetCore.Authorization;
 using webmvc.Data;
+using Microsoft.Extensions.Logging;
+
 
 
 namespace webmvc.Areas.Blog.Controllers
@@ -19,10 +21,12 @@ namespace webmvc.Areas.Blog.Controllers
     public class CategoryController : Controller
     {
         private readonly AppDbContext _context;
+         private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(AppDbContext context)
+        public CategoryController(AppDbContext context, ILogger<CategoryController> logger)
         {
             _context = context;
+            _logger  =logger;
         }
 
         // GET: Category
@@ -56,24 +60,22 @@ namespace webmvc.Areas.Blog.Controllers
 
             return View(category);
         }
-        public void CreateSelectItem(List<Category> source, List<Category> des, int level)
-        {
-             string prefix = string.Concat( Enumerable.Repeat("*",level));
-            foreach (var category in source)
-            {
-                // category.Title =prefix + category.Title;
-
-                des.Add(new Category(){
-                    Id =category.Id,
-                    Title = prefix +" " +category.Title
-                });
-                if(category.CategoryChildren?.Count >0) 
-                {
-                    CreateSelectItem(category.CategoryChildren.ToList(),des,level +1);
-                }
-
-            }
-        }
+        //  public void  CreateSelectItems(List<Category> source, List<Category> des, int level)
+        // {
+        //     string prefix = string.Concat(Enumerable.Repeat("----", level));
+        //     foreach (var category in source)
+        //     {
+        //         // category.Title = prefix + " " + category.Title;
+        //         des.Add(new Category() {
+        //             Id = category.Id,
+        //             Title = prefix + " " + category.Title
+        //         });
+        //         if (category.CategoryChildren?.Count > 0)
+        //         {
+        //             CreateSelectItems(category.CategoryChildren.ToList(), des, level +1);
+        //         }
+        //     }
+        // }
 
         // GET: Category/Create
         public async Task< IActionResult> Create()
@@ -91,7 +93,7 @@ namespace webmvc.Areas.Blog.Controllers
             });   
             var item = new List<Category>();        
 
-            CreateSelectItem(categories,item,0);
+            // CreateSelectItems(categories,item,0);
             var SelectList = new SelectList(categories, "Id", "Title");
 
             ViewData["ParentCategoryId"] = SelectList;
@@ -125,7 +127,7 @@ namespace webmvc.Areas.Blog.Controllers
             });
             var item = new List<Category>();        
 
-            CreateSelectItem(categories,item,0);                    
+            // CreateSelectItems(categories,item,0);                    
             var SelectList = new SelectList(categories, "Id", "Title");
             ViewData["ParentCategoryId"] = SelectList;
             return View(category);
@@ -157,7 +159,7 @@ namespace webmvc.Areas.Blog.Controllers
             });
             var item = new List<Category>();        
 
-            CreateSelectItem(categories,item,0);                    
+            // CreateSelectItems(categories,item,0);                    
             var SelectList = new SelectList(categories, "Id", "Title");
             ViewData["ParentCategoryId"] =           SelectList;
 
@@ -210,7 +212,7 @@ namespace webmvc.Areas.Blog.Controllers
             });
             var item = new List<Category>();        
 
-            CreateSelectItem(categories,item,0);                    
+            // CreateSelectItems(categories,item,0);                    
             var SelectList = new SelectList(categories, "Id", "Title");
             ViewData["ParentCategoryId"] = SelectList;
             return View(category);

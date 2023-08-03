@@ -2,7 +2,7 @@ using System;
 
 namespace webmvc.Models
 {
-    public class PagingModel
+    public class  PagingModel
     {
         public int currentpage { get; set; }
         public int countpages { get; set; }

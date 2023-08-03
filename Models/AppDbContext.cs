@@ -28,7 +28,16 @@ namespace webmvc.Models
                 }
             }
             modelBuilder.Entity<Category>(entity =>{
-                entity.HasIndex(c=>c.Slug);
+                entity.HasIndex(c=>c.Slug).IsUnique();
+            });
+
+            modelBuilder.Entity<PostCategory>(entity =>{
+                entity.HasKey(c => new {c.postID, c.categoryID});
+
+            });
+             modelBuilder.Entity<Post>(entity =>{
+                entity.HasIndex( p => p.Slug).IsUnique();
+                
             });
 
 
@@ -37,6 +46,9 @@ namespace webmvc.Models
        public DbSet<Contactt> contacts {get;set;}
        public DbSet<AppUser> appUsers {get;set;}
         public DbSet<Category> categories {get;set;}
+        public DbSet<Post> posts {get;set;}
+        public DbSet<PostCategory> postCategories {get;set;}
+
 
     }
 }
